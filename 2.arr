@@ -39,6 +39,7 @@ Cost = perimeter * 0.10
 T-shirt_Shop_Tagline = "Designs for everyone!"
 print(T-shirt_Shop_Tagline)
 
+
 # Task 4 Expiramenting with colors
 ("red" + "blue")
 
@@ -47,15 +48,28 @@ print(T-shirt_Shop_Tagline)
 num-to-string(1) + "blue"
 # The action "1 + "blue" leads to a error however when converting the number to a string it leads to a computed solution of "1blue" rather than an error compared to the first action.
 
+
 # Task 5: Making a Traffic light.
-# Constructing Rectangle
-rectangle(40, 100, "solid", "black")
 
-# Constructing lights
-circle(10, "solid", "red")
-circle(10, "solid", "Yellow")
-circle(10, "solid", "Green")
+#Defining Terms
+g = rectangle(40, 100, "solid", "black")
+a = circle(10, "solid", "red")
+b = circle(10, "solid", "yellow")
+c = circle(10, "solid", "green")
 
+# Stacking Cirlces
+stack = above(a, above(b, c))
 
+# Placing stack into rectangle.
+traffic = overlay(stack, g)
 
+#Adding a pole at the bottom. 
+pole = rectangle(8, 120, "solid", "grey")
 
+#final result
+final = above(traffic, pole)
+
+#Final result
+final
+
+# Task 6
