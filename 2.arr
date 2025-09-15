@@ -89,7 +89,7 @@ f3 = star(30, "solid", "blue")
 #overlaying the shapes together.
 overlay(f3, overlay(f2, f1))
 
-#Creating a shield
+#Creating a shield.
 
  
 
