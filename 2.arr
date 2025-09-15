@@ -72,4 +72,24 @@ final = above(traffic, pole)
 #Final result
 final
 
-# Task 6
+# Task 6: broken code hunt
+rectangle(50, 20, "solid", "black")
+
+circle(30, "solid", "red")
+
+# The issue with the first code (76) was that the code order was misplaced, as a result, the code didn't fnction as it was supposed to. Adding on, the underlying problem with the second code (78) was that a string wasn't used to denote the color. Therefore, leading to a error in the code action. 
+
+
+# Task 7: creating a Flag or a Shield
+#defining terms and generating shapes needed
+f1 = rectangle(150, 100, "solid", "dark green")
+f2 = circle(40, "solid", "red")
+f3 = star(30, "solid", "blue")
+
+#overlaying the shapes together.
+overlay(f3, overlay(f2, f1))
+
+#Creating a shield
+
+ 
+
