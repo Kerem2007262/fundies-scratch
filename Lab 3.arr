@@ -1,4 +1,6 @@
 use context dcic2024
+include tables
+include file
 
 # Excercise 1, designing a function to determine if given year is a leap year .
 
@@ -136,10 +138,13 @@ Bank = load-table:
   month :: String,
   rate :: Number
   source: csv-table-file("boe_rates.csv", default-options)
-  
+
   sanitize year using num-sanitizer
   sanitize day using num-sanitizer
   sanitize rate using num-sanitizer
-end 
+end
 
-Bank
+Bank.length()
+median(Bank, "rate")
+mean(Bank, "rate")
+order-by(Bank, "rate", true)
