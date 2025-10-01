@@ -1,6 +1,6 @@
 use context dcic2024
-include tables
-include file
+include csv
+include data-source
 
 # Excercise 1, designing a function to determine if given year is a leap year .
 
@@ -132,6 +132,7 @@ mars-distance
 
 # Excerise 5, Bank of England
 
+# importing BOE data through csv.
 Bank = load-table:
   year :: Number,
   day :: Number,
@@ -144,7 +145,12 @@ Bank = load-table:
   sanitize rate using num-sanitizer
 end
 
+Bank
+
+# Computing the stats of the data from BOE rates table by the rate column
 Bank.length()
 median(Bank, "rate")
 mean(Bank, "rate")
 order-by(Bank, "rate", true)
+
+Bank.length
