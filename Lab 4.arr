@@ -116,3 +116,37 @@ worst_origin
 worst_dep_delay
 
 
+
+# Excercise 3: Clean delays + Compute effective speed
+
+# Replace negative dep_delay values with 0
+neg_delay = flights.transform-column("dep_delay",
+    lam(d): if d < 0 then 0 else d end)
+
+# Replace negative arr_delay values with 0
+  neg_delay = flights.transform-column("arr_delay",
+    lam(d): if d < 0 then 0 else d end)
+
+# 3.2 Add effective_speed in mph: distance / (air_time/60) when air_time > 0 else 0
+with_effective_speed =
+  build-column(clean_delays, "effective_speed",
+    lam r:
+      if r["air_time"] > 0:
+        r["distance"] / (r["air_time"] / 60)
+      else:
+        0
+      end)
+
+# 3.3 Order by effective_speed descending (largest first)
+fastest_table = order-by(with_effective_speed, "effective_speed", false)
+
+# 3.4 Extract carrier, origin, dest of the fastest flight
+fastest_row = fastest_table.row-n(0)
+fastest_carrier = fastest_row["carrier"]
+fastest_origin  = fastest_row["origin"]
+fastest_dest    = fastest_row["dest"]
+
+"Fastest (cleaned) flight:"
+fastest_carrier
+fastest_origin
+fastest_dest
