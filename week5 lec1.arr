@@ -25,3 +25,17 @@ end
 undecided-voters = transform-column(voter-data, "Party", blank-to-undecided)
 
 freq-bar-chart(undecided-voters, "Party")
+
+
+
+fun km_to_mi(n :: Number) -> Number: 
+  doc:"Creating a function that converts km to mi"
+  n / 1.6
+end
+print(km_to_mi(45))
+
+ 
+
+
+
+
