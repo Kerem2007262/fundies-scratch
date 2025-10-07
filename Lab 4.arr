@@ -88,16 +88,15 @@ end
 
 # Step 3:using Lambda
 
-delayed_and_morning =
-  flights
-    .filter(lam(r): is_delayed_departure(r) end)
-    .filter(lam(r): is_morning_sched_dep(r) end)
+delayed_flight_morning_flight =
+  flights.filter(lam(r): is_delayed_departure(r) end)
+flights.filter(lam(r): is_morning_sched_dep(r) end)
 
-delayed_and_morning
+delayed_flight_morning_flight
 
 # Step 4: Filtering to only keep flights were the distance is > 500
 far_morning_delays =
-   delayed_and_morning.filter(lam(r): r["distance"] > 500 end)
+  delayed_flight_morning_flight.filter(lam(r): r["distance"] > 500 end)
 
 # Step 5: order by dep_delay descending (worst delays first)
 worst_delays =
@@ -119,28 +118,46 @@ worst_dep_delay
 
 # Excercise 3: Clean delays + Compute effective speed
 
-# Replace negative dep_delay values with 0
-neg_delay = flights.transform-column("dep_delay",
-    lam(d): if d < 0 then 0 else d end)
+# Replace the negative delays with 0 for dep_delay
+neg_delay1 = transform-column(flights, "dep_delay",
+  lam(d :: Number):
+    if d < 0: 
+      0 
+    else: d 
+    end 
+  end
+  )
 
-# Replace negative arr_delay values with 0
-  neg_delay = flights.transform-column("arr_delay",
-    lam(d): if d < 0 then 0 else d end)
+# replacing the negative delays with 0 for arr_delay
+neg_delay2 = transform-column(flights, "arr_delay",
+    lam(d :: Number): 
+    if d < 0: 
+    0
+    else: d 
+    end
+  end
+  )
 
-# 3.2 Add effective_speed in mph: distance / (air_time/60) when air_time > 0 else 0
-with_effective_speed =
-  build-column(clean_delays, "effective_speed",
-    lam r:
-      if r["air_time"] > 0:
+# Step 2: Adding a column for effecetive speed using Build-column
+effective_speed1 =
+  build-column(flights, "effective_speed",
+    lam(r :: Row):
+      if r["air_time"] > 0: 
         r["distance"] / (r["air_time"] / 60)
-      else:
+      else: 
         0
-      end)
+      end
+    end)
 
-# 3.3 Order by effective_speed descending (largest first)
-fastest_table = order-by(with_effective_speed, "effective_speed", false)
+# Displaying the Results
+effective_speed1
+neg_delay1
+neg_delay2
 
-# 3.4 Extract carrier, origin, dest of the fastest flight
+# Step 3: Ordering the table by effective_speed column
+fastest_table = order-by(effective_speed1, "effective_speed", false)
+
+# Step 4: Extracting the carrier, origin, dest of the fastest flight in the data. 
 fastest_row = fastest_table.row-n(0)
 fastest_carrier = fastest_row["carrier"]
 fastest_origin  = fastest_row["origin"]
@@ -150,3 +167,57 @@ fastest_dest    = fastest_row["dest"]
 fastest_carrier
 fastest_origin
 fastest_dest
+
+
+#Exercise 4: Discount late arrivals + On-Time Score  
+
+# Step 1: defining a function for apply-arrival-discount
+fun apply-arrival-discount(t :: Table) -> Table:
+  doc:"Creating a function to apply discounts for late arrivals"
+  t.transform-column("arr_delay",
+    lam(n :: Number): 
+      if (n >= 0) and (n <= 45): 
+        n * 0.8
+      else: n 
+      end
+    end)
+where:
+  before = table: arr_delay
+    row: -10
+    row:   0
+    row:  30
+    row:  60
+  end
+
+  expected = table: arr_delay
+    row: -10
+    row:   0
+    row:  24
+    row:  60
+  end
+
+  check:
+    apply-arrival-discount(before) is expected
+  end
+end
+
+# Checking the test block
+apply-arrival-discount(flights)
+
+
+# Step 2: Adding a new column on time score
+
+build-column(flights, "on_time_score", 
+  lam(r :: Row) block: 
+    score = 0
+    if (r["dep_delay"] < 0) and (r["arr_delay"] < 0): 
+    0 
+    else: 100 - (r["dep_delay"] - r["arr_delay"]) - (r["air_time"] / 30) end 
+  if score < 0: 0 
+    else: score
+  end
+  end
+  )
+
+
+# Step 3 
