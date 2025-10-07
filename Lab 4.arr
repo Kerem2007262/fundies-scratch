@@ -241,7 +241,7 @@ top_origin  = top_2["origin"]
 top_dest    = top_2["dest"]
 
 #Display of Results
-"Top two flight based on the following:"
+"Top two flight based on the following items:"
 top_carrier
 top_flight
 top_origin
