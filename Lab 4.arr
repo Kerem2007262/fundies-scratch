@@ -207,7 +207,7 @@ apply-arrival-discount(flights)
 
 # Step 2: Adding a new column on time score
 
-build-column(flights, "on_time_score", 
+new_table_flights = build-column(flights, "on_time_score", 
   lam(r :: Row) block: 
     score = 0
     if (r["dep_delay"] < 0) and (r["arr_delay"] < 0): 
@@ -219,5 +219,30 @@ build-column(flights, "on_time_score",
   end
   )
 
+new_table_flights
 
-# Step 3 
+# Step 3 ordering the coolumn for on_time_score (false) and ordering the column distance (true)
+
+dis = order-by(new_table_flights, "distance", true)
+score = order-by(new_table_flights, "on_time_score", false)
+
+#displaying the results
+dis
+score
+
+# Step 4: Extracting the carrier, flight, origin, and dest of the top two flights.
+top_2 =
+  new_table_flights.row-n(0)
+  new_table_flights.row-n(1)
+
+top_carrier = top_2["carrier"]
+top_flight  = top_2["flight"]
+top_origin  = top_2["origin"]
+top_dest    = top_2["dest"]
+
+#Display of Results
+"Top two flight based on the following:"
+top_carrier
+top_flight
+top_origin
+top_dest
