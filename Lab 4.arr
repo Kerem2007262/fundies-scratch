@@ -155,7 +155,7 @@ neg_delay1
 neg_delay2
 
 # Step 3: Ordering the table by effective_speed column
-fastest_table = order-by(effective_speed1, "effective_speed", false)
+fastest_table = order-by(effective_speed1, "effective_speed", true)
 
 # Step 4: Extracting the carrier, origin, dest of the fastest flight in the data. 
 fastest_row = fastest_table.row-n(0)

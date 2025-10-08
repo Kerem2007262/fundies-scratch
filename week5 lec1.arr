@@ -32,9 +32,20 @@ fun km_to_mi(n :: Number) -> Number:
   doc:"Creating a function that converts km to mi"
   n / 1.6
 end
-print(km_to_mi(45))
 
- 
+" 100 km is .... miles"
+km_to_mi(100)
+
+
+AQi = table: AQI, Category
+  row: range(0,51), "Good"
+  row: range(51,101), "Moderate"
+  row: range(101,151), "Unhealthy"
+  row: range(150, 200), "Hazardous"
+end
+
+AQi
+    
 
 
 
