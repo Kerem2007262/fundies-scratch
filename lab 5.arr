@@ -87,5 +87,76 @@ clean_data3 = transform-column(clean_data2, "arr_delay",
 # displaying the reults
 clean_data3 
 
+# Task 3 Identifying Duplicate rows. 
+
+# Step 1: Converting flights to string
+
+# Step 2: Normalizing the characters
+
+carriers_no_space = transform-column(clean_data3, "carrier", lam(s :: String): string-replace(s, " ", "") end)
+
+  carriers_fix = transform-column(carriers_no_space, "carrier", lam(s :: String): string-to-upper(s) end)
+
+
+# Step 3: Fixing dep_time to fit HH:MM
+
+# Making sure all has a length of 4
+length_time_fix = transform-column(carriers_fix,
+  "dep_time", lam(s :: Number): 
+    str = num-to-string(s)
+    if string-length(str) == 3:
+      "0" + str
+    else: 
+      str 
+    end 
+  end)
+
+
+# Adding a:
+  dep_times_fix = transform-column(length_time_fix, "dep_time", lam(s :: String): string-substring(s, 0, 2) + ":" + string-substring(s, 2, string-length(s)) end)
+
+# Building the dedupkey column
+  de_dupkey = build-column(dep_times_fix, "dedup_key", lam(r :: Row): r["flight"] + "-" + r["carrier"] + "-" + r["dep_time"] end)
+
+# Grouping and counting the keys
+  group(de_dupkey, "dedup_key")
+
+  count(de_dupkey, "dedup_key")
+
+
+
+#Task 4: Visualization and for each loop.
+
+# Step 1 be creating a Frequency bar chart for carriers, histogram for distance, and scatter plot for air time vs distance.
+
+#Creating a frequecy chart
+freq-bar-chart(de_dupkey, "carrier")
+
+# Creating a histogram
+histogram(de_dupkey, "distance", 2000)
+
+#Creating a scatterplot
+scatter-plot(de_dupkey, "air_time", "distance")
+
+# Step 2: creating a list
+distance-list = de_dupkey.get-column("distance")
+
+# Step 3: Using a loop
+
+# Calculating total
+total = fold(lam(acc, dist): acc + dist end, 0, distance-list)
+
+# Calculating maximum
+maximum = fold(lam(acc, dist): if dist > acc: dist else: acc end end, 0, distance-list)
+  
+  # calculatin avg
+  avg = total / length(distance-list)
+  
+  #Displaying results 
+total(distance-list)
+maximum(distance-list)
+avg(distance-list)
+
+
 
 
