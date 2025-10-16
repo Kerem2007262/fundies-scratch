@@ -153,9 +153,9 @@ maximum = fold(lam(acc, dist): if dist > acc: dist else: acc end end, 0, distanc
   avg = total / length(distance-list)
   
   #Displaying results 
-total(distance-list)
-maximum(distance-list)
-avg(distance-list)
+total
+maximum
+avg
 
 
 
