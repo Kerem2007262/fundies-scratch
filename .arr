@@ -76,6 +76,45 @@ Meets_rule = bookings.build-column("new rule", lam(r :: Row): if ((r["has-baggag
 
 Meets_rule
 
-qualified = Meets_rule.filter("new rule", lam(r): r["new rule"] == "yes" end)
+#qualified = Meets_rule.filter("new rule", lam(r): r["new rule"] == "yes" end)
 
-qualified.count()
+#qualified.count()
+
+
+AQI = table: item :: Number, Index :: String
+  
+  row: 50, "Good"
+  row: 101, "Moderate"
+  row: 151, "Unhealthy"
+  row: 999, "Hazardous"
+end
+    AQI
+
+fun Aqi(r :: Number) -> String:
+  if r <= 50: "Good" 
+  else if r <= 101: "Moderate"
+  else if r <= 151: " Unhealthy" 
+  else if r <= 152: "Hazardous"
+  else: r 
+  end
+end
+  
+Aqi(50)
+Aqi(101)
+
+basket = table: item :: String, price :: Number, quantity :: Number
+row: "apple", 0.50, 10
+row: "orange", 0.75, 5
+row: "watermelon", 2.99, 2
+end
+
+
+fun add_total(t :: Table) -> Table:
+  t.build-column("total", lam( r :: Row): r["price"] * r["quantity"] end)
+end 
+  
+"test"
+  add_total(basket)
+
+add_total(basket).filter(lam(r :: Row): r["total"] == 5 end) 
+
