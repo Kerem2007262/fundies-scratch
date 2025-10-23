@@ -234,3 +234,5 @@ passed-courses = pass(courses)
 chocolate = passed-courses.filter(lam(r :: Row): r["PASS"] == "yes" end)
 
 chocolate
+
+

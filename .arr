@@ -118,3 +118,35 @@ end
 
 add_total(basket).filter(lam(r :: Row): r["total"] == 5 end) 
 
+lights = table:
+  flightNo :: String,
+  destination :: String,
+  distanceKm :: Number,
+  weather :: String,
+  passengers :: Number,
+  delayed :: Boolean
+  row: "BA101", "London", 450, "Rainy", 180, false
+  row: "EK202", "Dubai", 5500, "Clear", 300, false
+  row: "QR303", "Doha", 5200, "Stormy", 250, true
+  row: "AA404", "New York", 5560, "Snowy", 280, true
+  row: "AF505", "Paris", 350, "Clear", 200, false
+  row: "SQ606", "Singapore", 10800, "Stormy", 350, true
+end
+
+lights
+
+fun add-risk( r :: Table) -> Table: 
+  r.build-column("risk", lam(a :: Row): if (a["weather"] == "Stormy") or (a["weather"] == "Snowy"): "High" else: "Low" end end)
+end
+
+lights_o = add-risk(lights)
+
+lights_o
+
+Biscuits = lights_o.build-column("priority", lam(z :: Row): if (z["risk"] == "High") and (z["passengers"] > 250): "Urgent" else: "Normal" end end)
+
+Biscuits
+
+Choc = Biscuits.filter( lam(g :: Row): g["priority"] == "Normal" end)
+
+Choc
