@@ -159,4 +159,78 @@ avg
 
 
 
+movies = table:
+  title :: String,
+  genre :: String,
+  rating1 :: Number,
+  rating2 :: Number,
+  rating3 :: Number
+  row: "Inception", "Sci-Fi", 9, 8, 9
+  row: "Titanic", "Romance", 8, 9, 8
+  row: "Avengers", "Action", 9, 9, 10
+  row: "Frozen", "Animation", 7, 8, 7
+  row: "Joker", "Drama", 10, 9, 9
+end
 
+movies
+
+fun avg-rating(r :: Table) -> Table:
+  r.build-column("avg_rating", lam(s :: Row): (s["rating1"] + s["rating2"] + s["rating3"]) / 3 end)
+end
+
+avg-rating(movies)
+
+climate = table:
+  city :: String,
+  tempC :: Number,
+  humidity :: Number,
+  rainfall :: Number
+  row: "London", 16, 75, 5
+  row: "Cairo", 33, 25, 0
+  row: "Tokyo", 28, 65, 20
+  row: "Sydney", 18, 60, 8
+  row: "Dubai", 40, 30, 0
+end
+
+climate 
+
+ fun alert(a :: Table) -> Table: 
+  a.build-column("alert", lam(r :: Row): 
+      if r["tempC"] > 35: 
+        "Heatwave" 
+    else if r["rainfall"] > 10: 
+        "Food Risk" 
+    else if r["humidity"] > 70: 
+        "Humid" 
+    else: 
+    "Normal" end end)
+end
+
+alert(climate)
+
+climate.order-by("city", true)
+
+
+courses = table:
+  student :: String,
+  attendance :: Number,
+  assignments :: Number,
+  finalExam :: Number
+  row: "Ali", 90, 80, 75
+  row: "Bella", 60, 50, 40
+  row: "Chris", 85, 88, 90
+  row: "Dana", 100, 95, 100
+  row: "Eli", 70, 68, 60
+end
+
+courses
+
+fun pass(p :: Table) -> Table:
+  p.build-column("PASS", lam(r :: Row): if (r["attendance"] > 70) and (r["assignments"] > 60) and (r["finalExam"] > 50): "yes" else: "NO" end end)
+end
+
+passed-courses = pass(courses)
+
+chocolate = passed-courses.filter(lam(r :: Row): r["PASS"] == "yes" end)
+
+chocolate
