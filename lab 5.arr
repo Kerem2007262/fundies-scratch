@@ -121,6 +121,8 @@ length_time_fix = transform-column(carriers_fix,
 # Grouping and counting the keys
   group(de_dupkey, "dedup_key")
 
+
+
   count(de_dupkey, "dedup_key")
 
 
@@ -234,5 +236,6 @@ passed-courses = pass(courses)
 chocolate = passed-courses.filter(lam(r :: Row): r["PASS"] == "yes" end)
 
 chocolate
+
 
 
