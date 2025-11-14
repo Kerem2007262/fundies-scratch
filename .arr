@@ -150,3 +150,10 @@ Biscuits
 Choc = Biscuits.filter( lam(g :: Row): g["priority"] == "Normal" end)
 
 Choc
+
+data Penguintree:
+  |leaf(name :: String)
+  |node(name :: String, children :: List<Penguintree>)
+end
+
+tree = leaf("Antartic")
