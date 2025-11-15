@@ -5,6 +5,7 @@ include data-source
 
 
 
+
 # Step 1: Defining the Data type for Penguin.
 data Penguin:
   | penguin(
@@ -49,6 +50,10 @@ Penguins
     
 
 
+
+# TASK 1 Scalar Processing
+
+
 # Step 3: Coding the first list technique, Scalar Processing to answer the following question, "What is the BMI of each penguin in my dataset?" using the given data set. (The design Recipie for this question can be found on the report.)
 
 # Convert Penguins table to list.
@@ -66,9 +71,19 @@ end
 # Mapping the table rows into a list and storing them.
 penguins-list = map(penguin-to-list, Penguins.all-rows())
 
-penguins-list
+#penguins-list
+
+
 
 # Step 4: Scaling the data set to answer the afformentioned question.
+fun round-digits(number :: Number, decimals :: Number) -> Number:
+ 
+  doc: "This is a helper function designed to round off the decimal places, this function was created after realizing the that the values calculated with the function 'calculating-bmi' were too large."
+  
+  multiplier = num-expt(10, decimals)
+  num-round(number * multiplier) / multiplier
+end
+
 
 fun calculating-bmi(penguins :: List<Penguin>) -> List<Number>:
   doc:"Creating a function that will calculate the Penguins BMI"
@@ -76,12 +91,42 @@ fun calculating-bmi(penguins :: List<Penguin>) -> List<Number>:
     | empty => empty 
     | link(first, rest) => 
       bmi = first.body_mass_g / num-sqr(first.flipper_length_mm) 
-      link(bmi, calculating-bmi(rest))
+      rounded_bmi = round-digits(bmi, 4)
+      link(rounded_bmi, calculating-bmi(rest))
   end 
 end
+
 
 #Displaying the Scalar result
 Penguin_BMI_num = calculating-bmi(penguins-list)
 
-Penguin_BMI_num
+Penguin_BMI_num 
+
+
+
+
+# Task 2 Transformation Process
+
+# Step 5:  Coding the second list technique, transforming the data set to answer the following question, "How can I convert all penguin species body masses from grams to kilograms?" (The design Recipie for this question can be found on the report.)
+
+fun transform_body_mass_to_kg(penguins :: List<Penguin>) -> List<Penguin>:
+
+  doc:"Creating a function that converts Body mass in grams of the penguins into Kg."
+  
+  cases (List) penguins:
+    | empty => empty
+    | link(first, rest) =>
+      mass-in-kg = round-digits(first.body_mass_g / 1000, 4)
+      new-penguin = penguin(first.species, first.island,
+        first.bill_length_mm, first.bill_depth_mm, first.flipper_length_mm, mass-in-kg,first.sex, first.year)
+      link(new-penguin, transform_body_mass_to_kg(rest))
+  end
+end
+
+#Displaying the Result -> ask if we have to put screen show of display of result in report. 
+
+Penguin_new = transform_body_mass_to_kg(penguins-list)
+
+Penguin_new
+
 
