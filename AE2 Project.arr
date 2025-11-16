@@ -118,7 +118,8 @@ fun transform_body_mass_to_kg(penguins :: List<Penguin>) -> List<Penguin>:
     | link(first, rest) =>
       mass-in-kg = round-digits(first.body_mass_g / 1000, 4)
       new-penguin = penguin(first.species, first.island,
-        first.bill_length_mm, first.bill_depth_mm, first.flipper_length_mm, mass-in-kg,first.sex, first.year)
+        first.bill_length_mm, first.bill_depth_mm, 
+first.flipper_length_mm, mass-in-kg,first.sex, first.year)
       link(new-penguin, transform_body_mass_to_kg(rest))
   end
 end
@@ -129,4 +130,32 @@ Penguin_new = transform_body_mass_to_kg(penguins-list)
 
 Penguin_new
 
+
+
+# Task 3: Selection 
+
+# Step 6:  Coding the third list technique, selecting the data set to answer the following question, "Which Penguin in the data set are considered heavy (body mass greater than 4.5 kg or 3500 grams)?" (The design Recipie for this question can be found on the report.) mention recursion in report
+
+fun heavy-penguins(penguins_selection_heavy :: List<Penguin>) -> List<Penguin>:
+  
+  doc:"Creating a fnction that slects penguins that weigh greater than 4.5kg."
+  
+  cases (List) penguins_selection_heavy:
+    |empty => empty
+    |link(first, rest) =>
+     
+      if first.body_mass_g > 4.5:
+        link(first, heavy-penguins(rest)) 
+        
+      else:
+        heavy-penguins(rest)
+        
+      end
+  end
+end 
+
+# Displaying the Results.
+Penguin_selection_heavy_new = heavy-penguins(Penguin_new)
+
+Penguin_selection_heavy_new
 
