@@ -134,7 +134,7 @@ Penguin_new
 
 # Task 3: Selection 
 
-# Step 6:  Coding the third list technique, selecting the data set to answer the following question, "Which Penguin in the data set are considered heavy (body mass greater than 4.5 kg or 3500 grams)?" (The design Recipie for this question can be found on the report.) mention recursion in report
+# Step 6:  Coding the third list technique, selecting the data set to answer the following question, "Which Penguin in the data set are considered heavy (body mass greater than 4.5 kg or 3500 grams)?" (The design Recipie for this question can be found on the report.) 
 
 fun heavy-penguins(penguins_selection_heavy :: List<Penguin>) -> List<Penguin>:
   
@@ -159,3 +159,110 @@ Penguin_selection_heavy_new = heavy-penguins(Penguin_new)
 
 Penguin_selection_heavy_new
 
+
+
+
+#Task 4: Accumulation
+
+# Step 7: Coding the Final technique,  selecting the data set to answer the following question, "What is the average flipper length in mm of of the Adelie penguin species across all three islands?" (The design Recipie for this question can be found on the report.) 
+
+# Step 8: Filtering the original data table to include only the species I will be examining be the Adelie species. 
+
+Adelie_species = Penguins.filter(lam(p): p["species"] == "Adelie" end)
+
+# Displaying the filtered table
+Adelie_species
+
+# Convert Penguins table to list.
+fun Adelie-to-list(row):
+  
+ doc:"Creating a fucntion that converts the table into a list."
+  
+  penguin(row["species"], row["island"], row["bill_length_mm"],
+          row["bill_depth_mm"], 
+    
+row["flipper_length_mm"], row["body_mass_g"],
+          row["sex"], row["year"])
+end
+
+Adelie-list = map(Adelie-to-list, Adelie_species.all-rows())
+
+# Step 9: Accumelating the flipper length of the Adelie species across all 3 islands (Torgersen, Biscoe, and Dream).
+
+
+fun sum-flipper-length-by-island(penguins :: List<Penguin>, island :: String) -> Number:
+  doc:" Creating a function that gets the sum of the flipper lengths by each island (Torgersen, Biscoe, and Dream)."
+  cases (List) penguins:
+    |empty => 0
+    |link(first, rest) =>
+      
+      if first.island == island:
+        
+        first.flipper_length_mm + sum-flipper-length-by-island(rest, island) 
+        
+        else:
+        sum-flipper-length-by-island(rest, island)
+end 
+
+  end 
+
+end
+  
+
+
+
+fun count-penguins-island(penguins :: List<Penguin>, island :: String) -> Number:
+  
+  doc:"Creating a function that counts the number of Adelie species penguin on each respective island."
+  
+  cases (List) penguins:
+    |empty => 0
+    |link(first, rest) =>
+      
+      if first.island == island:
+        
+        1 + count-penguins-island(rest, island)
+        
+        else:
+        count-penguins-island(rest, island)
+end 
+
+  end 
+
+end
+
+
+
+fun avg-flipper-length-by-island(penguins :: List<Penguin>) -> List<Number>:
+  
+  doc:"Creating a function that calculates the average flipper length of the Adelie species by each respective island using the helper functions above 'sum-flipper-length-by-island' and 'count-penguins-island'."
+ 
+  torgersen_total = sum-flipper-length-by-island(penguins, "Torgersen")
+  
+  torgersen_count = count-penguins-island(penguins, "Torgersen")
+  
+  torgersen_avg = round-digits(torgersen_total / torgersen_count, 2)
+  
+ 
+  biscoe_total = sum-flipper-length-by-island(penguins, "Biscoe")
+  
+  biscoe_count = count-penguins-island(penguins, "Biscoe")
+  
+  biscoe_avg = round-digits(biscoe_total / biscoe_count, 2)
+  
+  dream_total = sum-flipper-length-by-island(penguins, "Dream")
+  
+  dream_count = count-penguins-island(penguins, "Dream")
+  
+  dream_avg = round-digits(dream_total / dream_count, 2)
+  
+  #Returning a list of all averages
+  [list: torgersen_avg, biscoe_avg, dream_avg]
+end 
+
+#Displaying results for Adelie penguins on different islands with their avg flipper length.
+
+avg_islands = avg-flipper-length-by-island(Adelie-list)
+
+avg_islands
+  
