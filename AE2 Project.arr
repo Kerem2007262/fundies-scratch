@@ -84,16 +84,28 @@ fun round-digits(number :: Number, decimals :: Number) -> Number:
   num-round(number * multiplier) / multiplier
 end
 
-
 fun calculating-bmi(penguins :: List<Penguin>) -> List<Number>:
-  doc:"Creating a function that will calculate the Penguins BMI"
+  doc: "Creating a function that will calculate the Penguins BMI"
   cases (List) penguins:
     | empty => empty 
     | link(first, rest) => 
       bmi = first.body_mass_g / num-sqr(first.flipper_length_mm) 
-      rounded_bmi = round-digits(bmi, 4)
-      link(rounded_bmi, calculating-bmi(rest))
+      rounded-bmi = round-digits(bmi, 4)
+      link(rounded-bmi, calculating-bmi(rest))
   end 
+where:
+  # Test 1: Empty list
+  calculating-bmi(empty) is empty
+  
+  # Test 2: One penguin test Adeline 
+  adelie-test = penguin("Adelie", "Torgersen", 39.1, 18.7, 181, 3750, "male", 2007)
+  result = calculating-bmi([list: adelie-test])
+  list.length(result) is 0.1145
+  
+  # Test 3: Two penguins test
+  calculating-bmi("Adelie", "Torgersen", 39.5, 17.4, 186, 3800, "female", 2007) is 0.1098
+
+ 
 end
 
 
@@ -101,6 +113,7 @@ end
 Penguin_BMI_num = calculating-bmi(penguins-list)
 
 Penguin_BMI_num 
+
 
 
 
