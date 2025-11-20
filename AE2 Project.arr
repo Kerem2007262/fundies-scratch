@@ -76,6 +76,8 @@ penguins-list = map(penguin-to-list, Penguins.all-rows())
 
 
 # Step 4: Scaling the data set to answer the afformentioned question.
+
+# Helper function
 fun round-digits(number :: Number, decimals :: Number) -> Number:
  
   doc: "This is a helper function designed to round off the decimal places, this function was created after realizing the that the values calculated with the function 'calculating-bmi' were too large."
@@ -84,6 +86,7 @@ fun round-digits(number :: Number, decimals :: Number) -> Number:
   num-round(number * multiplier) / multiplier
 end
 
+# Main Function
 fun calculating-bmi(penguins :: List<Penguin>) -> List<Number>:
   doc: "Creating a function that will calculate the Penguins BMI"
   cases (List) penguins:
@@ -94,18 +97,18 @@ fun calculating-bmi(penguins :: List<Penguin>) -> List<Number>:
       link(rounded-bmi, calculating-bmi(rest))
   end 
 where:
-  # Test 1: Empty list
+  # Test 1 empty case
   calculating-bmi(empty) is empty
-  
-  # Test 2: One penguin test Adeline 
+ 
+  # Test 2 Adelie Penguin test id # 1
   adelie-test = penguin("Adelie", "Torgersen", 39.1, 18.7, 181, 3750, "male", 2007)
   result = calculating-bmi([list: adelie-test])
-  list.length(result) is 0.1145
-  
-  # Test 3: Two penguins test
-  calculating-bmi("Adelie", "Torgersen", 39.5, 17.4, 186, 3800, "female", 2007) is 0.1098
-
+  result.first is 0.1145
  
+  # Test 3 Adelie female Penguin test id # 2 
+  adelie-test2 = penguin("Adelie", "Torgersen", 39.5, 17.4, 186, 3800, "female", 2007)
+  result2 = calculating-bmi([list:adelie-test, adelie-test2])
+  result2.rest.first is 0.1098
 end
 
 
@@ -120,7 +123,7 @@ Penguin_BMI_num
 
 # Task 2 Transformation Process
 
-# Step 5:  Coding the second list technique, transforming the data set to answer the following question, "How can I convert all penguin species body masses from grams to kilograms?" (The design Recipie for this question can be found on the report.)
+# Step 5: Coding the second list technique, transforming the data set to answer the following question, "How can I convert all penguin species body masses from grams to kilograms?" (The design Recipie for this question can be found on the report.)
 
 fun transform_body_mass_to_kg(penguins :: List<Penguin>) -> List<Penguin>:
 
@@ -135,6 +138,21 @@ fun transform_body_mass_to_kg(penguins :: List<Penguin>) -> List<Penguin>:
 first.flipper_length_mm, mass-in-kg,first.sex, first.year)
       link(new-penguin, transform_body_mass_to_kg(rest))
   end
+where:
+  # Test 1 is empty list case.
+  transform_body_mass_to_kg(empty) is empty
+ 
+  # Test 2 Adelie Penguin test, g to kg
+  adelie-test = penguin("Adelie", "Torgersen", 39.1, 18.7, 181, 3750, "male", 2007)
+  result = transform_body_mass_to_kg([list: adelie-test])
+  
+  result.first.body_mass_g is 3.75
+ 
+  # Test 3 Adelie female Penguin test, g to kg
+  adelie-test2 = penguin("Adelie", "Torgersen", 39.5, 17.4, 186, 3800, "female", 2007)
+  result2 = transform_body_mass_to_kg([list:adelie-test, adelie-test2])
+  
+  result2.rest.first.body_mass_g is 3.8
 end
 
 #Displaying the Result -> ask if we have to put screen show of display of result in report. 
@@ -165,6 +183,21 @@ fun heavy-penguins(penguins_selection_heavy :: List<Penguin>) -> List<Penguin>:
         
       end
   end
+where:
+  # Test 1 empty list 
+  heavy-penguins(empty) is empty
+  
+  # Test 2 not heavy penguin test
+  chinstrap-test = penguin("Chinstrap", "Dream", 45.7, 17, 195, 3.65, "female", 2009) 
+  
+  result = heavy-penguins([list:chinstrap-test])
+  result.length() is 0
+  
+  # Test 3 heavy penguin test
+  gentoo-test = penguin("Gentoo", "Biscoe", 45.2, 14.8, 212, 5.2, "female", 2009)
+  
+  result2 = heavy-penguins([list:gentoo-test])
+  result2.length() is 1
 end 
 
 # Displaying the Results.
@@ -200,9 +233,13 @@ end
 
 Adelie-list = map(Adelie-to-list, Adelie_species.all-rows())
 
+
+
+
 # Step 9: Accumelating the flipper length of the Adelie species across all 3 islands (Torgersen, Biscoe, and Dream).
 
 
+# Helper Function
 fun sum-flipper-length-by-island(penguins :: List<Penguin>, island :: String) -> Number:
   doc:" Creating a function that gets the sum of the flipper lengths by each island (Torgersen, Biscoe, and Dream)."
   cases (List) penguins:
@@ -223,7 +260,7 @@ end
   
 
 
-
+# Helper Function
 fun count-penguins-island(penguins :: List<Penguin>, island :: String) -> Number:
   
   doc:"Creating a function that counts the number of Adelie species penguin on each respective island."
@@ -245,7 +282,7 @@ end
 end
 
 
-
+# Main function
 fun avg-flipper-length-by-island(penguins :: List<Penguin>) -> List<Number>:
   
   doc:"Creating a function that calculates the average flipper length of the Adelie species by each respective island using the helper functions above 'sum-flipper-length-by-island' and 'count-penguins-island'."
@@ -271,7 +308,33 @@ fun avg-flipper-length-by-island(penguins :: List<Penguin>) -> List<Number>:
   
   #Returning a list of all averages
   [list: torgersen_avg, biscoe_avg, dream_avg]
+
+where:
+torgersen1 = penguin("Adelie", "Torgersen", 39.1, 18.7, 181, 3750, "male", 2007)
+  
+  torgersen2 = penguin("Adelie", "Torgersen", 40.0, 19.0, 185, 3800, "female", 2007)
+  
+
+  biscoes1 = penguin("Adelie", "Biscoe", 38.0, 18.0, 190, 3700, "male", 2007)
+  
+  dream1 = penguin("Adelie", "Dream", 42.0, 20.0, 195, 4000, "male", 2008)
+ 
+  dream2 = penguin("Adelie", "Dream", 39.0, 18.5, 185, 3600, "female", 2008)
+  
+  average_test_list = [list: torgersen1, torgersen2, biscoes1, dream1, dream2]
+  
+  result = avg-flipper-length-by-island(average_test_list)
+  
+  # Average for Torgersen island based off of 2 data points.
+  result.first is 183
+  
+  # Average for Biscoe island based off of 1 data point.
+  result.rest.first is 190
+  
+  # Average for Dream Island based off of 2 data points.
+  result.rest.rest.first is 190
 end 
+
 
 #Displaying results for Adelie penguins on different islands with their avg flipper length.
 
