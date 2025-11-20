@@ -71,7 +71,7 @@ end
 # Mapping the table rows into a list and storing them.
 penguins-list = map(penguin-to-list, Penguins.all-rows())
 
-# Display of result is excluded to ensure the result for the scalar process is better visable. 
+# Display of result is excluded to ensure the result for the scalar process is visable better. 
 #penguins-list
 
 
